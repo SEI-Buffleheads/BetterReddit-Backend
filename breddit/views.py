@@ -2,8 +2,10 @@ from django.shortcuts import render
 from rest_framework import viewsets, permissions, generics
 from .serializers import PostSerializer, CommentSerializer, UserSerializer
 from .models import Post, Comment
-from django.contrib.auth.models import User
 from .permissions import IsOwnerOrReadOnly
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
