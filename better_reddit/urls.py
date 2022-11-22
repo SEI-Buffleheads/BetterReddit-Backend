@@ -16,15 +16,16 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
-from breddit.views import PostViewSet, CommentViewSet
+from breddit.views import PostViewSet, CommentViewSet, up_vote
 
 router = routers.DefaultRouter()
 router.register(r'posts', PostViewSet)
 router.register(r'comments', CommentViewSet)
 
 urlpatterns = [
+    path('admin/', admin.site.urls),
     path('', include(router.urls)),
     path('api/', include(('breddit.routers', 'breddit'), namespace='breddit-api')),
-    path('admin/', admin.site.urls),
+    path('up_vote', up_vote, name='up-vote')
 ]
 
