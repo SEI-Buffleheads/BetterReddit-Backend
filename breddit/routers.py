@@ -1,5 +1,5 @@
 from rest_framework.routers import SimpleRouter
-from .views import UserViewSet, LoginViewSet, RegistrationViewSet, RefreshViewSet
+from .views import UserViewSet, LoginViewSet, RegistrationViewSet, RefreshViewSet, PostViewSet, CommentViewSet
 
 routes = SimpleRouter()
 
@@ -10,6 +10,10 @@ routes.register(r'auth/refresh', RefreshViewSet, basename='auth-refresh')
 
 # USER
 routes.register(r'user', UserViewSet, basename='user')
+
+# Post and Comments
+routes.register(r'posts', PostViewSet)
+routes.register(r'comments', CommentViewSet)
 
 urlpatterns = [
     *routes.urls,
