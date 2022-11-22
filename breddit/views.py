@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .serializers import PostSerializer, CommentSerializer, UserSerializer, LoginSerializer, RegisterSerializer
+from .serializers import PostSerializer, CommentSerializer, UserSerializer, LoginSerializer, RegisterSerializer, ChangePasswordSerializer
 from .models import Post, Comment, User
 from .permissions import IsOwnerOrReadOnly
 from rest_framework import viewsets, permissions, generics, filters, status
@@ -105,4 +105,10 @@ class RefreshViewSet(viewsets.ViewSet, TokenRefreshView):
             raise InvalidToken(e.args[0])
 
         return Response(serializer.validated_data, status=status.HTTP_200_OK)
+      
+class ChangePasswordView(viewsets.ModelViewSet):
+    http_method_names = ['put']
+    queryset = User.objects.all()
+    permission_classes = (IsAuthenticated,)
+    serializer_class = ChangePasswordSerializer
   

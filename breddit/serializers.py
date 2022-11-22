@@ -56,3 +56,24 @@ class RegisterSerializer(UserSerializer):
         except ObjectDoesNotExist:
             user = User.objects.create_user(**validated_data)
         return user
+
+class ChangePasswordSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
+    old_password = serializers.CharField(write_only=True, required=True)
+
+    class Meta:
+        model = User
+        fields = ('old_password', 'password')
+
+    def validate_old_password(self, value):
+        user = self.context['request'].user
+        if not user.check_password(value):
+            raise serializers.ValidationError({"old_password": "Old password is not correct"})
+        return value
+
+    def update(self, instance, validated_data):
+
+        instance.set_password(validated_data['password'])
+        instance.save()
+
+        return instance
