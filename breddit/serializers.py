@@ -4,6 +4,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.settings import api_settings
 from django.contrib.auth.models import update_last_login
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth.password_validation import validate_password
 
 class PostSerializer(serializers.ModelSerializer):
   class Meta:

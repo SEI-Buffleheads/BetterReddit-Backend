@@ -33,10 +33,9 @@ class CommentViewSet(viewsets.ModelViewSet):
 class UserViewSet(viewsets.ModelViewSet):
     http_method_names = ['get']
     serializer_class = UserSerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly,
+                      IsOwnerOrReadOnly]
     filter_backends = [filters.OrderingFilter]
-    ordering_fields = ['updated']
-    ordering = ['-updated']
 
     def get_queryset(self):
         if self.request.user.is_superuser:
@@ -44,8 +43,9 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def get_object(self):
         lookup_field_value = self.kwargs[self.lookup_field]
+        print(lookup_field_value)
 
-        obj = User.objects.get(lookup_field_value)
+        obj = User.objects.get(id=lookup_field_value)
         self.check_object_permissions(self.request, obj)
 
         return obj
@@ -102,3 +102,4 @@ class RefreshViewSet(viewsets.ViewSet, TokenRefreshView):
             raise InvalidToken(e.args[0])
 
         return Response(serializer.validated_data, status=status.HTTP_200_OK)
+  
