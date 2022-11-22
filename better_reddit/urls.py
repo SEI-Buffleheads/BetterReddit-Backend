@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
-from breddit.views import PostViewSet, CommentViewSet, UserList, UserDetail
+from breddit.views import PostViewSet, CommentViewSet
 
 router = routers.DefaultRouter()
 router.register(r'posts', PostViewSet)
@@ -24,9 +24,7 @@ router.register(r'comments', CommentViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('users/', UserList.as_view()),
-    path('users/<int:pk>/', UserDetail.as_view()),
+    path('api/', include(('breddit.routers', 'breddit'), namespace='breddit-api')),
     path('admin/', admin.site.urls),
-    path('api-auth/', include('rest_framework.urls')),
 ]
 

@@ -13,7 +13,7 @@ class UserManager(BaseUserManager):
     user.save(using=self._db)
     return user
   
-  def create_superuser(self, username, password):
+  def create_superuser(self, username, password, email=None):
     if password is None:
       raise TypeError("Need Password")
     if username is None:
