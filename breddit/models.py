@@ -40,7 +40,7 @@ class Post(models.Model):
   title = models.CharField(max_length=256)
   body = models.CharField(max_length=256)
   created_at = models.DateTimeField(default=datetime.now)
-  votes = models.IntegerField(default=0, null=True)
+  no_likes = models.IntegerField(default=0)
   
   def __str__(self):
     return self.title
@@ -50,8 +50,15 @@ class Comment(models.Model):
   body = models.CharField(max_length=256)
   post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
   created_at = models.DateTimeField(default=datetime.now)
-  votes = models.IntegerField(default=0, null=True)
+  votes = models.IntegerField(blank=True, null=True)
   
   def __str__(self):
     return self.owner
 
+
+class UpVote(models.Model):
+  post_id = models.CharField(max_length=500)
+  username = models.CharField(max_length=100)
+  
+  def __str__(self):
+    return self.username
