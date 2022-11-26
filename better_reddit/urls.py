@@ -24,6 +24,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(router.urls)),
     path('api/', include(('breddit.routers', 'breddit'), namespace='breddit-api')),
-    path('up_vote', up_vote, name='up-vote')
+    path('up_vote', up_vote, name='up-vote'),
 ]
 

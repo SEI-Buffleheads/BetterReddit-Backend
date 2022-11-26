@@ -21,9 +21,11 @@ class CommentSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     posts = serializers.PrimaryKeyRelatedField(many=True, queryset=Post.objects.all())
     comments = serializers.PrimaryKeyRelatedField(many=True, queryset=Comment.objects.all())
+    favorites = serializers.StringRelatedField(many=True, read_only=True)
+    
     class Meta:
         model = User
-        fields = ['id','username','posts', 'comments', 'avatar', 'created_at', 'is_active']
+        fields = ['id','username','posts', 'comments', 'avatar', 'created_at', 'is_active', 'favorites']
         read_only_field = ['posts', 'comments', 'created_at', 'is_active']
 
 class LoginSerializer(TokenObtainPairSerializer):
@@ -44,15 +46,16 @@ class LoginSerializer(TokenObtainPairSerializer):
 
 class RegisterSerializer(UserSerializer):
     password = serializers.CharField(max_length=128, min_length=8, write_only=True, required=True)
-    username = serializers.CharField(max_length=128, write_only=True, required=True)
+    username = serializers.CharField(max_length=128, required=True)
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'password', 'is_active', 'created_at']
+        fields = ['id', 'username', 'password', 'avatar', 'is_active', 'created_at']
 
     def create(self, validated_data):
         try:
             user = User.objects.get(username=validated_data['username'])
+            user = None
         except ObjectDoesNotExist:
             user = User.objects.create_user(**validated_data)
         return user

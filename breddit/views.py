@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .serializers import PostSerializer, CommentSerializer, UserSerializer, LoginSerializer, RegisterSerializer, ChangePasswordSerializer
 from .models import Post, Comment, User
 from .permissions import IsOwnerOrReadOnly
@@ -9,7 +9,6 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-
 
 
 class PostViewSet(viewsets.ModelViewSet):
@@ -36,13 +35,13 @@ class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly,]
     filter_backends = [filters.OrderingFilter]
 
-    def get_queryset(self):
-        if self.request.user.is_superuser:
-            return User.objects.all()
-    
     # def get_queryset(self):
-    #     if self.request.user:
+    #     if self.request.user.is_superuser:
     #         return User.objects.all()
+    
+    def get_queryset(self):
+        if self.request.user:
+            return User.objects.all()
 
     def get_object(self):
         lookup_field_value = self.kwargs[self.lookup_field]
@@ -84,11 +83,10 @@ class RegistrationViewSet(ModelViewSet, TokenObtainPairView):
             "refresh": str(refresh),
             "access": str(refresh.access_token),
         }
-
         return Response({
             "user": serializer.data,
             "refresh": res["refresh"],
-            "token": res["access"]
+            "access": res["access"]
         }, status=status.HTTP_201_CREATED)
 
 
@@ -114,9 +112,8 @@ class ChangePasswordView(viewsets.ModelViewSet):
   
 
 def up_vote(request):
-  username = request.user.username 
+  username = request.user.username
   post_id = request.GET.get(post_id)
-  
   post = Post.objects.get(id=post_id)
   
   like_filter = LikePost.objects.filter(post_id=post_id, username=username).first()
