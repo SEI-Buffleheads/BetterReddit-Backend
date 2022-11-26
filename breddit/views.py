@@ -9,7 +9,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-
+from rest_framework.views import APIView
 
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
@@ -109,5 +109,41 @@ class ChangePasswordView(viewsets.ModelViewSet):
     queryset = User.objects.all()
     permission_classes = (IsAuthenticated,)
     serializer_class = ChangePasswordSerializer
+
+class LikedPostView(APIView):
+    bad_request_message = 'An error has occurred'
+
+    def post(self, request):
+        post = get_object_or_404(Post, id=request.data.get('id'))
+        if request.user not in post.likes.all():
+            post.likes.add(request.user)
+            return Response({'detail': 'User liked the post'}, status=status.HTTP_200_OK)
+        return Response({'detail': self.bad_request_message}, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request):
+        post = get_object_or_404(Post, id=request.data.get('id'))
+        if request.user in post.likes.all():
+            post.likes.remove(request.user)
+            return Response({'detail': 'User unliked the post'}, status=status.HTTP_204_NO_CONTENT)
+        return Response({'detail': self.bad_request_message}, status=status.HTTP_400_BAD_REQUEST)
+
+class FavoriteView(APIView):
+    bad_request_message = 'An error has occurred'
+
+    def post(self, request):
+        post = get_object_or_404(Post, id=request.data.get('id'))
+        user = request.user
+        if  post not in user.favorites.all():
+            user.favorites.add(post)
+            return Response({'detail': 'User favorited the post'}, status=status.HTTP_200_OK)
+        return Response({'detail': self.bad_request_message}, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request):
+        post = get_object_or_404(Post, id=request.data.get('id'))
+        user = request.user
+        if  post not in user.favorites.all():
+            user.favorites.remove(post)
+            return Response({'detail': 'User unfavorited the post'}, status=status.HTTP_204_NO_CONTENT)
+        return Response({'detail': self.bad_request_message}, status=status.HTTP_400_BAD_REQUEST)
   
 

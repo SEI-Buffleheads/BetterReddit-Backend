@@ -25,8 +25,8 @@ class UserSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = User
-        fields = ['id','username','posts', 'comments', 'avatar', 'created_at', 'is_active', 'favorites']
-        read_only_field = ['posts', 'comments', 'created_at', 'is_active']
+        fields = ['id','username','posts', 'comments', 'avatar', 'date_joined', 'is_active', 'favorites', 'last_login', 'updated_at']
+        read_only_field = ['date_joined', 'is_active', 'last_login']
 
 class LoginSerializer(TokenObtainPairSerializer):
 
@@ -50,7 +50,7 @@ class RegisterSerializer(UserSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'password', 'avatar', 'is_active', 'created_at']
+        fields = ['id','username', 'avatar', 'date_joined', 'is_active']
 
     def create(self, validated_data):
         try:

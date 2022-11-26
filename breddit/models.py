@@ -4,22 +4,24 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager, Permission
 from django.conf import settings
 
 class Post(models.Model):
-  owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='posts_by', on_delete=models.CASCADE, null=True)
+  owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='posts', on_delete=models.CASCADE, null=True)
   title = models.CharField(max_length=256)
-  body = models.CharField(max_length=256)
-  created_at = models.DateTimeField(default=datetime.now)
+  body = models.CharField(max_length=512)
+  created_at = models.DateTimeField(auto_now_add=True)
+  updated_at = models.DateTimeField(auto_now=True)
   link = models.URLField(default='', blank=True)
-  votes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='liked_posts', blank=True)
+  likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='post_liked', blank=True)
   
   def __str__(self):
     return self.title
   
 class Comment(models.Model):
-  owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='comments_by', on_delete=models.CASCADE, null=True)
-  body = models.CharField(max_length=256)
+  owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='comments', on_delete=models.CASCADE, null=True)
+  body = models.CharField(max_length=512)
   post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='op')
-  created_at = models.DateTimeField(default=datetime.now)
-  votes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='liked_comments', blank=True)
+  created_at = models.DateTimeField(auto_now_add=True)
+  updated_at = models.DateTimeField(auto_now=True)
+  likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='comment_liked', blank=True)
   
   def __str__(self):
     return self.owner
@@ -45,10 +47,10 @@ class UserManager(BaseUserManager):
     return user
     
 class User(AbstractUser, PermissionsMixin):
-  created_at = models.DateTimeField(default=datetime.now)
   avatar = models.ImageField(upload_to='avatars', default='default-avatar.png')
   is_active = models.BooleanField(default=True)
   is_staff = models.BooleanField(default=False)
+  updated_at = models.DateTimeField(auto_now=True)
   favorites = models.ManyToManyField(Post, related_name='favorited', blank=True)
   
   objects = UserManager()
