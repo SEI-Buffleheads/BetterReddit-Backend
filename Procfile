@@ -1,1 +1,1 @@
-web: gunicorn better_reddit.wsqi --log-file -
+web: gunicorn better_reddit.wsgi --log-file -
