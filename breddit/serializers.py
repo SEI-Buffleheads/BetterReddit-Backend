@@ -60,7 +60,7 @@ class RegisterSerializer(UserSerializer):
             user = User.objects.create_user(**validated_data)
         return user
 
-class ChangePasswordSerializer(serializers.ModelSerializer):
+class ChangePasswordSerializer(serializers.Serializer):
     model = User
     new_password = serializers.CharField(max_length=128, min_length=8, write_only=True, required=True, validators=[validate_password])
     old_password = serializers.CharField(write_only=True, required=True)
