@@ -10,7 +10,7 @@ class Post(models.Model):
   body = models.CharField(max_length=512)
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
-  link = models.URLField(default='', blank=True)
+  link = models.URLField(default='https://www.google.com/', blank=True)
   likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='post_liked', blank=True)
   
   def __str__(self):
@@ -49,6 +49,7 @@ class UserManager(BaseUserManager):
     
 class User(AbstractUser, PermissionsMixin):
   avatar = models.ImageField(upload_to='avatars', default='default.png')
+  banner = models.ImageField(upload_to='banners', default='banner.jpg')
   is_active = models.BooleanField(default=True)
   is_staff = models.BooleanField(default=False)
   updated_at = models.DateTimeField(auto_now=True)
