@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from .serializers import PostSerializer, CommentSerializer, UserSerializer, LoginSerializer, RegisterSerializer, ChangePasswordSerializer
+from .serializers import PostSerializer, CommentSerializer, UserSerializer, LoginSerializer, RegisterSerializer, ChangePasswordSerializer, UpdateAvatarSerializer
 from .models import Post, Comment, User
 from .permissions import IsOwnerOrReadOnly
 from rest_framework import viewsets, permissions, generics, filters, status
@@ -145,5 +145,11 @@ class FavoriteView(APIView):
             user.favorites.remove(post)
             return Response({'detail': 'User unfavorited the post'}, status=status.HTTP_204_NO_CONTENT)
         return Response({'detail': self.bad_request_message}, status=status.HTTP_400_BAD_REQUEST)
+
+class UpdateAvatarView(viewsets.ModelViewSet):
+
+    queryset = User.objects.all()
+    permission_classes = (IsAuthenticated,)
+    serializer_class = UpdateAvatarSerializer
   
 

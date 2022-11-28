@@ -50,7 +50,7 @@ class RegisterSerializer(UserSerializer):
 
     class Meta:
         model = User
-        fields = ['id','username', 'avatar', 'date_joined', 'is_active']
+        fields = ['id','username','password', 'avatar', 'date_joined', 'is_active']
 
     def create(self, validated_data):
         try:
@@ -77,6 +77,24 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
 
         instance.set_password(validated_data['password'])
+        instance.save()
+
+        return instance
+
+class UpdateAvatarSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ('avatar',)
+
+    def update(self, instance, validated_data):
+        user = self.context['request'].user
+
+        if user.pk != instance.pk:
+            raise serializers.ValidationError({"authorize": "You dont have permission for this user."})
+
+        instance.avatar = validated_data['avatar']
+
         instance.save()
 
         return instance
