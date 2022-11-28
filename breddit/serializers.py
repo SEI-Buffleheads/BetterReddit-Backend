@@ -62,8 +62,8 @@ class RegisterSerializer(UserSerializer):
 
 class ChangePasswordSerializer(serializers.Serializer):
     model = User
-    new_password = serializers.CharField(max_length=128, min_length=8, write_only=True, required=True, validators=[validate_password])
-    old_password = serializers.CharField(write_only=True, required=True)
+    new_password = serializers.CharField(max_length=128, min_length=8, required=True)
+    old_password = serializers.CharField(required=True)
     
 
 class UpdateAvatarSerializer(serializers.ModelSerializer):
