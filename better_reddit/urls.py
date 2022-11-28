@@ -15,8 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls.static import static
 from rest_framework import routers
 from breddit.views import LikedPostView, FavoriteView
+from settings import settings
 
 router = routers.DefaultRouter()
 
@@ -26,5 +28,6 @@ urlpatterns = [
     path('api/', include(('breddit.routers', 'breddit'), namespace='breddit-api')),
     path('likePost/', LikedPostView.as_view()),
     path('favorite/', FavoriteView.as_view()),
-]
+    
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

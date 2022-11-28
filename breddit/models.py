@@ -48,7 +48,7 @@ class UserManager(BaseUserManager):
     return user
     
 class User(AbstractUser, PermissionsMixin):
-  avatar = models.ImageField(upload_to='avatars', default='default-avatar.png')
+  avatar = models.ImageField(upload_to='avatars', default='default.png')
   is_active = models.BooleanField(default=True)
   is_staff = models.BooleanField(default=False)
   updated_at = models.DateTimeField(auto_now=True)
