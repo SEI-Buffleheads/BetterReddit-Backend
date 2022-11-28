@@ -141,7 +141,7 @@ class FavoriteView(APIView):
     def delete(self, request):
         post = get_object_or_404(Post, id=request.data.get('id'))
         user = request.user
-        if  post not in user.favorites.all():
+        if  post in user.favorites.all():
             user.favorites.remove(post)
             return Response({'detail': 'User unfavorited the post'}, status=status.HTTP_204_NO_CONTENT)
         return Response({'detail': self.bad_request_message}, status=status.HTTP_400_BAD_REQUEST)

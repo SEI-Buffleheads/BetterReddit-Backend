@@ -6,6 +6,7 @@ from django.conf import settings
 class Post(models.Model):
   owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='posts', on_delete=models.CASCADE, null=True)
   title = models.CharField(max_length=256)
+  category = models.CharField(max_length=256)
   body = models.CharField(max_length=512)
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
