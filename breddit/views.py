@@ -45,7 +45,6 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def get_object(self):
         lookup_field_value = self.kwargs[self.lookup_field]
-        print(lookup_field_value)
 
         obj = User.objects.get(id=lookup_field_value)
         self.check_object_permissions(self.request, obj)
@@ -104,11 +103,34 @@ class RefreshViewSet(viewsets.ViewSet, TokenRefreshView):
 
         return Response(serializer.validated_data, status=status.HTTP_200_OK)
       
-class ChangePasswordView(viewsets.ModelViewSet):
-    http_method_names = ['put']
-    queryset = User.objects.all()
-    permission_classes = (IsAuthenticated,)
+class ChangePasswordView(generics.UpdateAPIView):
     serializer_class = ChangePasswordSerializer
+    model = User
+    permission_classes = (IsAuthenticated,)
+
+    def get_object(self, queryset=None):
+        obj = self.request.user
+        return obj
+
+    def update(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        serializer = self.get_serializer(data=request.data)
+
+        if serializer.is_valid():
+            if not self.object.check_password(serializer.data.get("old_password")):
+                return Response({"old_password": ["Wrong password."]}, status=status.HTTP_400_BAD_REQUEST)
+            self.object.set_password(serializer.data.get("new_password"))
+            self.object.save()
+            response = {
+                'status': 'success',
+                'code': status.HTTP_200_OK,
+                'message': 'Password updated successfully',
+                'data': []
+            }
+
+            return Response(response)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class LikedPostView(APIView):
     bad_request_message = 'An error has occurred'
