@@ -7,11 +7,10 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.password_validation import validate_password
 
 class PostSerializer(serializers.ModelSerializer):
-  owner = serializers.StringRelatedField(many=True, read_only=True)
   class Meta:
     model = Post
     fields = '__all__'
-    owner = serializers.ReadOnlyField(source='owner.username')
+    owner = serializers.StringRelatedField(source='owner.username')
     
 class CommentSerializer(serializers.ModelSerializer):
   class Meta:
