@@ -14,6 +14,7 @@ class PostSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
     
 class CommentSerializer(serializers.ModelSerializer):
+  owner = serializers.CharField()
   class Meta:
     model = Comment
     fields = '__all__'
@@ -79,8 +80,9 @@ class UpdateAvatarSerializer(serializers.ModelSerializer):
         if user.pk != instance.pk:
             raise serializers.ValidationError({"authorize": "You dont have permission for this user."})
 
-        instance.avatar = validated_data['avatar']
+        instance.avatar = ['avatar']
 
         instance.save()
 
         return instance
+

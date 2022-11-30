@@ -168,10 +168,34 @@ class FavoriteView(APIView):
             return Response({'detail': 'User unfavorited the post'}, status=status.HTTP_204_NO_CONTENT)
         return Response({'detail': self.bad_request_message}, status=status.HTTP_400_BAD_REQUEST)
 
-class UpdateAvatarView(viewsets.ModelViewSet):
-
+class UpdateAvatarView(generics.UpdateAPIView):
     queryset = User.objects.all()
     permission_classes = (IsAuthenticated,)
     serializer_class = UpdateAvatarSerializer
   
+class UpdateBannerView(generics.UpdateAPIView):
+    serializer_class = UserSerializer
+    model = User
+    permission_classes = (IsAuthenticated,)
 
+    def get_object(self, queryset=None):
+        obj = self.request.user
+        return obj
+
+    def update(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        serializer = self.get_serializer(data=request.data)
+
+        if serializer.is_valid():
+            self.object.avatar = serializer.data.get("avatar")
+            self.object.save()
+            response = {
+                'status': 'success',
+                'code': status.HTTP_200_OK,
+                'message': 'avatar updated successfully',
+                'data': []
+            }
+
+            return Response(response)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

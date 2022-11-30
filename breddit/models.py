@@ -11,6 +11,7 @@ class Post(models.Model):
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
   link = models.URLField(default='https://www.google.com/', blank=True)
+  thumbnail = models.ImageField(upload_to='thumbnails', default='oven.png')
   likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='post_liked', blank=True)
   
   def __str__(self):
