@@ -174,6 +174,7 @@ class UpdateAvatarView(generics.UpdateAPIView):
     serializer_class = UpdateAvatarSerializer
   
 class UpdateBannerView(generics.UpdateAPIView):
+    serializer_class = UpdateBannerSerializer
     permission_classes = (IsAuthenticated,)
     model = User
     
