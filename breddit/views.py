@@ -174,9 +174,11 @@ class UpdateAvatarView(generics.UpdateAPIView):
     serializer_class = UpdateAvatarSerializer
   
 class UpdateBannerView(generics.UpdateAPIView):
+    queryset = User.objects.all()
     serializer_class = UserSerializer
-    model = User
     permission_classes = (IsAuthenticated,)
+    model = User
+    
 
     def update(self, request, *args, **kwargs):
         self.object = self.get_object()
