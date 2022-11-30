@@ -188,6 +188,7 @@ class UpdateBannerView(generics.UpdateAPIView):
 
         if serializer.is_valid():
             self.object.avatar = serializer.data.get("avatar")
+            print(serializer.data.get("avatar"))
             self.object.save()
             response = {
                 'status': 'success',
