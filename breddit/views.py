@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from .serializers import PostSerializer, CommentSerializer, UserSerializer, LoginSerializer, RegisterSerializer, ChangePasswordSerializer
 from .models import Post, Comment, User
+from .form import *
 from .permissions import IsOwnerOrReadOnly
 from rest_framework import viewsets, permissions, generics, filters, status
 from rest_framework.viewsets import ModelViewSet
@@ -10,6 +11,9 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework.views import APIView
+# from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
+# from rest_framework.decorators import api_view, permission_classes
+# import os
 
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
@@ -169,5 +173,32 @@ class FavoriteView(APIView):
             return Response({'detail': 'User unfavorited the post'}, status=status.HTTP_204_NO_CONTENT)
         return Response({'detail': self.bad_request_message}, status=status.HTTP_400_BAD_REQUEST)
 
+# class UpdateView(APIView):  
+#     bad_request_message = 'An error has occurred'
   
+#     def post(self, request):
+#         user = request.user
+#         form = ImageForm(request.POST, request.FILES, instance=user)
+#         if form.is_valid():
+#           avatar = user.avatar.path
+#           if os.path.exists(avatar):
+#               os.remove(avatar)
+#           form.save()
+#         return Response({'detail': "okie"})
+
+
+# @ensure_csrf_cookie
+# def edit(request):
+#     if request.method == "POST":
+#         user = request.user
+#         form = ImageForm(request.POST, request.FILES, instance=user)
+#         if form.is_valid():
+#             avatar = user.avatar.path
+#             if os.path.exists(avatar):
+#                 os.remove(avatar)
+#             form.save()
+#         return Response({'detail': "okie"})
+#     else:
+#       return Response({'detail': "NOPE"})
+
 

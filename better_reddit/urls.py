@@ -29,6 +29,7 @@ urlpatterns = [
     path('api/likePost/', LikedPostView.as_view()),
     path('api/favorite/', FavoriteView.as_view()),
     path('api/auth/changePw/', ChangePasswordView.as_view(), name='changePw'),
+    # path('api/auth/avatar/', edit.as_view(), name='avatar'),
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
