@@ -14,6 +14,7 @@ class PostSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
     
 class CommentSerializer(serializers.ModelSerializer):
+  owner = serializers.CharField()
   class Meta:
     model = Comment
     fields = '__all__'
