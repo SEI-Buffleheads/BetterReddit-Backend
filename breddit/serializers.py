@@ -85,4 +85,11 @@ class UpdateAvatarSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
+      
+class UpdateBannerSerializer(serializers.Serializer):
+    class Meta:
+        model = User
+        fields = ('banner',)
+    
+    
 

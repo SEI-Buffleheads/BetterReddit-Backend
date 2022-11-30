@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from .serializers import PostSerializer, CommentSerializer, UserSerializer, LoginSerializer, RegisterSerializer, ChangePasswordSerializer, UpdateAvatarSerializer
+from .serializers import PostSerializer, CommentSerializer, UserSerializer, LoginSerializer, RegisterSerializer, ChangePasswordSerializer, UpdateAvatarSerializer, UpdateBannerSerializer
 from .models import Post, Comment, User
 from .permissions import IsOwnerOrReadOnly
 from rest_framework import viewsets, permissions, generics, filters, status
