@@ -14,7 +14,6 @@ class PostSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
     
 class CommentSerializer(serializers.ModelSerializer):
-  owner = serializers.CharField()
   class Meta:
     model = Comment
     fields = '__all__'
@@ -67,29 +66,3 @@ class ChangePasswordSerializer(serializers.Serializer):
     new_password = serializers.CharField(max_length=128, min_length=8, required=True)
     old_password = serializers.CharField(required=True)
     
-
-class UpdateAvatarSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = User
-        fields = ('avatar',)
-
-    def update(self, instance, request):
-        user = request.user
-
-        if user.id != instance.id:
-            raise serializers.ValidationError({"authorize": "You dont have permission for this user."})
-
-        instance.avatar = ['avatar']
-
-        instance.save()
-
-        return instance
-      
-class UpdateBannerSerializer(serializers.Serializer):
-    class Meta:
-        model = User
-        fields = ('banner',)
-    
-    
-

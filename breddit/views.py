@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from .serializers import PostSerializer, CommentSerializer, UserSerializer, LoginSerializer, RegisterSerializer, ChangePasswordSerializer, UpdateAvatarSerializer, UpdateBannerSerializer
+from .serializers import PostSerializer, CommentSerializer, UserSerializer, LoginSerializer, RegisterSerializer, ChangePasswordSerializer
 from .models import Post, Comment, User
 from .permissions import IsOwnerOrReadOnly
 from rest_framework import viewsets, permissions, generics, filters, status
@@ -119,6 +119,7 @@ class ChangePasswordView(generics.UpdateAPIView):
         if serializer.is_valid():
             if not self.object.check_password(serializer.data.get("old_password")):
                 return Response({"old_password": ["Wrong password."]}, status=status.HTTP_400_BAD_REQUEST)
+
             self.object.set_password(serializer.data.get("new_password"))
             self.object.save()
             response = {
@@ -168,35 +169,5 @@ class FavoriteView(APIView):
             return Response({'detail': 'User unfavorited the post'}, status=status.HTTP_204_NO_CONTENT)
         return Response({'detail': self.bad_request_message}, status=status.HTTP_400_BAD_REQUEST)
 
-class UpdateAvatarView(generics.UpdateAPIView):
-    queryset = User.objects.all()
-    permission_classes = (IsAuthenticated,)
-    serializer_class = UpdateAvatarSerializer
   
-class UpdateBannerView(generics.UpdateAPIView):
-    serializer_class = UpdateBannerSerializer
-    permission_classes = (IsAuthenticated,)
-    model = User
-    
-    def get_object(self, queryset=None):
-        obj = self.request.user
-        return obj   
-    
-    def update(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        serializer = self.get_serializer(data=request.data)
 
-        if serializer.is_valid():
-            self.object.avatar = serializer.data.get("avatar")
-            print(serializer.data.get("avatar"))
-            self.object.save()
-            response = {
-                'status': 'success',
-                'code': status.HTTP_200_OK,
-                'message': 'avatar updated successfully',
-                'data': []
-            }
-
-            return Response(response)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

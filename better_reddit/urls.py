@@ -18,7 +18,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework import routers
-from breddit.views import LikedPostView, FavoriteView, ChangePasswordView, UpdateAvatarView, UpdateBannerView
+from breddit.views import LikedPostView, FavoriteView, ChangePasswordView, UpdateAvatarView
 
 router = routers.DefaultRouter()
 
@@ -29,8 +29,6 @@ urlpatterns = [
     path('api/likePost/', LikedPostView.as_view()),
     path('api/favorite/', FavoriteView.as_view()),
     path('api/auth/changePw/', ChangePasswordView.as_view(), name='changePw'),
-    path('api/auth/updateAvatar/', UpdateAvatarView.as_view(), name='updateAvatar'),
-    path('api/auth/updateBanner/', UpdateBannerView.as_view(), name='updateBanner'),
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
