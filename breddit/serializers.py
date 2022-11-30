@@ -26,7 +26,7 @@ class UserSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = User
-        fields = ['id','username','posts', 'comments', 'avatar', 'date_joined', 'is_active', 'favorites', 'last_login', 'updated_at']
+        fields = ['id','username','posts', 'comments', 'avatar', 'banner', 'date_joined', 'is_active', 'favorites', 'last_login', 'updated_at']
         read_only_field = ['date_joined', 'is_active', 'last_login']
 
 class LoginSerializer(TokenObtainPairSerializer):
