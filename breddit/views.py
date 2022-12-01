@@ -193,9 +193,6 @@ class FavoriteView(APIView):
 #         user = request.user
 #         form = ImageForm(request.POST, request.FILES, instance=user)
 #         if form.is_valid():
-#             avatar = user.avatar.path
-#             if os.path.exists(avatar):
-#                 os.remove(avatar)
 #             form.save()
 #         return Response({'detail': "okie"})
 #     else:
