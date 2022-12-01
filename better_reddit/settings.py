@@ -75,6 +75,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
     "http://127.0.0.1:8000",
     'https://betterreddit-backend-production.up.railway.app',
+    "https://breddit.netlify.app/",
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
